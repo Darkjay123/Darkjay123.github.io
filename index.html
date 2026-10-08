@@ -79,10 +79,11 @@ h2 em{color:var(--acid)}
 /* chain (pinned horizontal) */
 #chain{position:relative}
 #chain .stick{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+#chain h2{font-size:clamp(38px,5.4vw,72px)}#chain .lead{font-size:16px}@media(max-height:760px) and (min-width:761px){#chain .lead{display:none}#chain .head{margin-bottom:22px}}
 #chain .head{padding:0 clamp(18px,6vw,80px);max-width:1280px;margin:0 auto 34px;width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
 .prog{font:600 12px var(--fm);color:var(--mute);white-space:nowrap}.prog b{color:var(--acid)}
 .track{display:flex;gap:22px;padding:0 clamp(18px,6vw,80px);will-change:transform}
-.blk{flex:0 0 330px;height:420px;border:1px solid var(--line2);border-radius:22px;background:linear-gradient(180deg,var(--ink2),var(--ink));padding:20px;display:flex;flex-direction:column;cursor:pointer;position:relative;transition:transform .3s,border-color .3s,box-shadow .3s}
+.blk{flex:0 0 330px;height:clamp(340px,56vh,420px);overflow:hidden;border:1px solid var(--line2);border-radius:22px;background:linear-gradient(180deg,var(--ink2),var(--ink));padding:20px;display:flex;flex-direction:column;cursor:pointer;position:relative;transition:transform .3s,border-color .3s,box-shadow .3s}
 .blk:hover{transform:translateY(-8px);border-color:var(--acid);box-shadow:0 30px 60px -30px rgba(200,255,62,.4)}
 .blk:after{content:'';position:absolute;top:50%;right:-23px;width:23px;height:2px;background:repeating-linear-gradient(90deg,var(--dim) 0 4px,transparent 4px 8px)}
 .blk:last-child:after{display:none}
@@ -93,6 +94,7 @@ h2 em{color:var(--acid)}
 .hash{font:400 10.5px/1.5 var(--fm);color:var(--dim);margin:14px 0 0;word-break:break-all}
 .hash span{color:var(--mute)}
 .kind{margin-top:auto;font:600 11px var(--fm);text-transform:uppercase;letter-spacing:.12em;color:var(--clay)}
+.blk .wm{position:absolute;left:14px;top:34%;font:400 128px/1 var(--fs);color:rgba(239,231,218,.045);pointer-events:none;letter-spacing:-.04em;transition:color .3s}.blk:hover .wm{color:rgba(200,255,62,.09)}
 .blk h3{font:400 34px/1 var(--fs);margin:8px 0 10px;letter-spacing:-.01em}
 .blk p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.5}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
@@ -401,7 +403,7 @@ async function buildChain(){let prev='0'.repeat(64);
  $('#track').innerHTML=B.map((b,i)=>`<article class="blk" data-i="${i}" tabindex="0" data-hover aria-label="Block ${i}: ${esc(b.t)}">
   <div class="bh"><span class="n">#${String(i).padStart(3,'0')}</span><span class="st" id="st${i}">pending</span></div>
   <div class="hash">hash <span>${b.hash.slice(0,20)}…</span><br>prev ${b.prev.slice(0,20)}…</div>
-  <div class="kind">${esc(b.k)}</div><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p>
+  <span class="wm" aria-hidden="true">${String(i).padStart(2,"0")}</span><div class="kind">${esc(b.k)}</div><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p>
   <div class="chips">${b.c.map(c=>`<span>${esc(c)}</span>`).join('')}</div>${b.y?`<span class="yr">${esc(b.y)}</span>`:''}</article>`).join('');
  $('#pt').textContent=B.length-1;$('#fh').textContent='genesis '+B[0].hash.slice(0,12)+'…';$('#hb').textContent='#'+(B.length-1);
  $$('.blk').forEach(e=>{e.onclick=()=>inspect(+e.dataset.i);e.onkeydown=k=>{if(k.key==='Enter')inspect(+e.dataset.i)}});
@@ -456,9 +458,9 @@ const KIND={PushEvent:'push',CreateEvent:'create',PullRequestEvent:'pr',IssuesEv
 function evText(e){const p=e.payload||{};if(e.type==='PushEvent'){const c=(p.commits||[]).slice(-1)[0];return c?c.message.split('\n')[0]:`pushed ${p.size||''} commit(s)`}
  if(e.type==='CreateEvent')return `created ${p.ref_type}${p.ref?' '+p.ref:''}`;if(e.type==='PullRequestEvent')return `${p.action} PR: ${(p.pull_request||{}).title||''}`;if(e.type==='ReleaseEvent')return `released ${(p.release||{}).tag_name||''}`;return (KIND[e.type]||e.type).replace('Event','')}
 fetch(GH).then(r=>r.ok?r.json():null).then(u=>{if(!u)return;const el=$('#s_repos b');if(el)count(el,u.public_repos)}).catch(()=>{});
-fetch(GH+'/events/public?per_page=40').then(r=>r.ok?r.json():Promise.reject()).then(ev=>{EV=ev.filter(e=>e.repo&&!/^\./.test(e.repo.name));
+fetch(GH+'/events/public?per_page=60').then(r=>r.ok?r.json():Promise.reject()).then(ev=>{EV=[];for(const e of ev.filter(e=>e.repo&&!/^\./.test(e.repo.name))){const p=EV[EV.length-1];if(p&&p.repo.name===e.repo.name&&p.type===e.type){p._n=(p._n||1)+1}else EV.push(e)}
  const last=EV.find(e=>e.type==='PushEvent');if(last)$('#s_push b').textContent=ago(last.created_at);
- $('#pool').innerHTML=EV.slice(0,9).map((e,i)=>`<div class="row" style="animation-delay:${i*.05}s"><span class="t">${esc(KIND[e.type]||'event')}</span><span class="r"><a href="https://github.com/${esc(e.repo.name)}" target="_blank" rel="noopener">${esc(e.repo.name.split('/')[1])}</a><small>${esc(evText(e))}</small></span><span class="a">${ago(e.created_at)} ago</span></div>`).join('')||'<div class="row"><span class="t">quiet</span><span class="r">No public activity in the last few days.</span><span class="a"></span></div>';renderTick()})
+ $('#pool').innerHTML=EV.slice(0,9).map((e,i)=>`<div class="row" style="animation-delay:${i*.05}s"><span class="t">${esc(KIND[e.type]||'event')}${e._n>1?' ×'+e._n:''}</span><span class="r"><a href="https://github.com/${esc(e.repo.name)}" target="_blank" rel="noopener">${esc(e.repo.name.split('/')[1])}</a><small>${esc(evText(e))}</small></span><span class="a">${ago(e.created_at)} ago</span></div>`).join('')||'<div class="row"><span class="t">quiet</span><span class="r">No public activity in the last few days.</span><span class="a"></span></div>';renderTick()})
  .catch(()=>{$('#pool').innerHTML=`<div class="row"><span class="t">offline</span><span class="r">GitHub's public API is rate-limiting this browser. <a href="https://github.com/Darkjay123" target="_blank" rel="noopener">See it on GitHub ↗</a></span><span class="a"></span></div>`;$('#s_push b').textContent='↗'});
 function renderTick(){const items=[...EV.slice(0,6).map(e=>`<span><i>${esc(KIND[e.type]||'evt')}</i> ${esc(e.repo.name.split('/')[1])} · ${ago(e.created_at)} ago</span>`),...B.map((b,i)=>`<span><b>#${String(i).padStart(3,'0')}</b> ${esc(b.t)}</span>`)];$('#tick').innerHTML=items.join('')+items.join('')}
 
