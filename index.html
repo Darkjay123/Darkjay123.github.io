@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>John Enechukwu · I make Web3 make sense</title>
+<meta name="description" content="John Enechukwu (EJC): Web3 educator and builder from Nigeria. Founder of NextChain, co-founder and CTO of PoulCheck, builder of RugRadar and WetinSign.">
+<meta property="og:title" content="John Enechukwu · I make Web3 make sense">
+<meta property="og:description" content="A block explorer of everything I've shipped: communities, research and tools that keep crypto newcomers in Africa safe.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@The_Real_EJC">
+<meta name="theme-color" content="#0c0b09">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0b09'/%3E%3Crect x='6' y='6' width='9' height='9' rx='2' fill='%23c8ff3e'/%3E%3Crect x='17' y='17' width='9' height='9' rx='2' fill='%23ff6a2b'/%3E%3Cpath d='M15 10.5h4.5V17' stroke='%23efe7da' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0c0b09;--ink2:#15130f;--ink3:#1f1c17;--bone:#efe7da;--mute:#a49b8c;--dim:#6f675b;--acid:#c8ff3e;--clay:#ff6a2b;--sky:#7cc7ff;--line:rgba(239,231,218,.12);--line2:rgba(239,231,218,.22);
+--fd:'Space Grotesk',system-ui,sans-serif;--fs:'Instrument Serif',Georgia,serif;--fm:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--bone);font:400 16px/1.55 var(--fd);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--acid);color:var(--ink)}
+a{color:inherit}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#net{position:fixed;inset:0;z-index:0;pointer-events:none}
+main,nav,footer{position:relative;z-index:2}
+.mono{font-family:var(--fm)}
+/* cursor lens */
+.lens{position:fixed;left:0;top:0;width:34px;height:34px;border:1.5px solid var(--acid);border-radius:50%;pointer-events:none;z-index:80;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s,border-color .25s;mix-blend-mode:difference;display:none}
+.lens.big{width:74px;height:74px;background:rgba(200,255,62,.12)}
+@media (hover:hover) and (pointer:fine){.lens{display:block}}
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px clamp(14px,4vw,40px);background:linear-gradient(var(--ink) 30%,rgba(12,11,9,0));z-index:50}
+.logo{display:flex;align-items:center;gap:10px;font:700 15px var(--fm);text-decoration:none;letter-spacing:-.02em}
+.logo i{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--acid);color:var(--ink);font-style:normal;font-weight:700}
+.modes{display:flex;gap:2px;padding:3px;border:1px solid var(--line2);border-radius:999px;background:rgba(21,19,15,.8);backdrop-filter:blur(8px);position:relative}
+.modes button{position:relative;z-index:1;border:0;background:none;color:var(--mute);font:600 12.5px var(--fd);padding:7px 13px;border-radius:999px;cursor:pointer;transition:color .2s}
+.modes button.on{color:var(--ink)}
+.modes .pill{position:absolute;top:3px;bottom:3px;border-radius:999px;background:var(--acid);transition:left .35s cubic-bezier(.6,0,.2,1),width .35s cubic-bezier(.6,0,.2,1)}
+.navr{display:flex;align-items:center;gap:10px}
+.kbd{font:600 11px var(--fm);color:var(--mute);border:1px solid var(--line2);border-radius:7px;padding:5px 9px;background:none;cursor:pointer}
+.kbd:hover{color:var(--acid);border-color:var(--acid)}
+@media(max-width:620px){.kbd{display:none}.logo span{display:none}}
+/* hero */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:110px clamp(18px,6vw,80px) 60px;max-width:1280px;margin:0 auto}
+.meta{font:500 12px var(--fm);color:var(--mute);display:flex;flex-wrap:wrap;gap:8px 16px;margin-bottom:26px}
+.meta b{color:var(--acid);font-weight:600}
+.meta .live:before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--acid);margin-right:7px;box-shadow:0 0 0 0 rgba(200,255,62,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(200,255,62,0)}100%{box-shadow:0 0 0 0 rgba(200,255,62,0)}}
+h1{font:400 clamp(52px,11.5vw,168px)/.88 var(--fs);letter-spacing:-.03em;margin:0}
+h1 .l2{display:block;font-style:italic;color:var(--acid)}
+h1 .ch{display:inline-block;min-width:.2em}
+h1 .ch.sc{color:var(--clay);font-family:var(--fm);font-size:.55em;vertical-align:.25em}
+.who{margin-top:30px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:end}
+.sub{font:400 clamp(18px,2.2vw,24px)/1.4 var(--fd);color:var(--bone);margin:0;max-width:640px;min-height:3.2em}
+.sub em{font-family:var(--fs);font-size:1.18em;color:var(--acid)}
+.j{border-bottom:1.5px dashed var(--clay);cursor:help;position:relative}
+.tip{position:fixed;z-index:90;max-width:260px;background:var(--bone);color:var(--ink);font:500 13px/1.45 var(--fd);padding:10px 12px;border-radius:12px;pointer-events:none;opacity:0;transform:translateY(6px);transition:opacity .15s,transform .15s;box-shadow:0 18px 40px -10px rgba(0,0,0,.6)}
+.tip.on{opacity:1;transform:none}.tip b{display:block;font:600 10.5px var(--fm);color:#7a5a2e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.id{justify-self:end;text-align:right;font:500 13px/1.7 var(--fm);color:var(--mute)}
+.id strong{display:block;font:600 22px var(--fd);color:var(--bone);letter-spacing:-.01em;margin-bottom:4px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font:600 15px var(--fd);text-decoration:none;border:1.5px solid var(--bone);color:var(--bone);background:none;cursor:pointer;transition:transform .2s,background .2s,color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.p{background:var(--acid);border-color:var(--acid);color:var(--ink)}
+.btn.p:hover{background:var(--bone);border-color:var(--bone)}
+@media(max-width:760px){.who{grid-template-columns:1fr}.id{justify-self:start;text-align:left}}
+/* ticker */
+.tick{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap;font:500 12.5px var(--fm);color:var(--mute);background:rgba(21,19,15,.7)}
+.tick .tr{display:inline-flex;gap:46px;padding:12px 0;animation:tk 60s linear infinite}
+.tick span b{color:var(--acid);font-weight:600}.tick span i{color:var(--clay);font-style:normal}
+@keyframes tk{to{transform:translateX(-50%)}}
+/* sections */
+section.s{padding:110px clamp(18px,6vw,80px);max-width:1280px;margin:0 auto}
+.kick{font:600 12px var(--fm);color:var(--clay);text-transform:uppercase;letter-spacing:.14em;margin-bottom:14px}
+h2{font:400 clamp(40px,6.5vw,88px)/.95 var(--fs);letter-spacing:-.025em;margin:0 0 18px}
+h2 em{color:var(--acid)}
+.lead{font-size:clamp(16px,1.7vw,19px);color:var(--mute);max-width:620px;margin:0}
+/* chain (pinned horizontal) */
+#chain{position:relative}
+#chain .stick{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+#chain .head{padding:0 clamp(18px,6vw,80px);max-width:1280px;margin:0 auto 34px;width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+.prog{font:600 12px var(--fm);color:var(--mute);white-space:nowrap}.prog b{color:var(--acid)}
+.track{display:flex;gap:22px;padding:0 clamp(18px,6vw,80px);will-change:transform}
+.blk{flex:0 0 330px;height:420px;border:1px solid var(--line2);border-radius:22px;background:linear-gradient(180deg,var(--ink2),var(--ink));padding:20px;display:flex;flex-direction:column;cursor:pointer;position:relative;transition:transform .3s,border-color .3s,box-shadow .3s}
+.blk:hover{transform:translateY(-8px);border-color:var(--acid);box-shadow:0 30px 60px -30px rgba(200,255,62,.4)}
+.blk:after{content:'';position:absolute;top:50%;right:-23px;width:23px;height:2px;background:repeating-linear-gradient(90deg,var(--dim) 0 4px,transparent 4px 8px)}
+.blk:last-child:after{display:none}
+.bh{display:flex;justify-content:space-between;font:600 11.5px var(--fm);color:var(--mute)}
+.bh .n{color:var(--acid)}
+.st{font:600 10.5px var(--fm);padding:3px 8px;border-radius:999px;border:1px solid var(--line2);color:var(--mute)}
+.st.ok{color:var(--acid);border-color:rgba(200,255,62,.4)}
+.hash{font:400 10.5px/1.5 var(--fm);color:var(--dim);margin:14px 0 0;word-break:break-all}
+.hash span{color:var(--mute)}
+.kind{margin-top:auto;font:600 11px var(--fm);text-transform:uppercase;letter-spacing:.12em;color:var(--clay)}
+.blk h3{font:400 34px/1 var(--fs);margin:8px 0 10px;letter-spacing:-.01em}
+.blk p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.chips span{font:600 11.5px var(--fm);padding:5px 9px;border-radius:8px;background:rgba(200,255,62,.08);color:var(--acid);border:1px solid rgba(200,255,62,.2)}
+.blk .yr{position:absolute;right:20px;bottom:18px;font:600 11px var(--fm);color:var(--dim)}
+@media(max-width:760px){#chain .stick{position:static;height:auto;padding:100px 0 40px}.track{flex-direction:column;transform:none!important}.blk{flex:none;height:auto;min-height:300px}.blk:after{top:auto;bottom:-23px;right:auto;left:40px;width:2px;height:23px;background:repeating-linear-gradient(180deg,var(--dim) 0 4px,transparent 4px 8px)}#chain .head{flex-direction:column;align-items:flex-start}}
+/* inspector */
+.insp{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--bone);color:var(--ink);z-index:70;transform:translateX(105%);transition:transform .5s cubic-bezier(.7,0,.2,1);overflow:auto;padding:28px 28px 40px}
+.insp.on{transform:none}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:65;opacity:0;pointer-events:none;transition:opacity .4s}.scrim.on{opacity:1;pointer-events:auto}
+.insp .x{position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--ink);background:none;font-size:18px;cursor:pointer}
+.insp .bn{font:600 12px var(--fm);color:#7a5a2e}
+.insp h3{font:400 52px/.95 var(--fs);margin:12px 0 16px;letter-spacing:-.02em}
+.insp p{font-size:16px;line-height:1.6;margin:0 0 14px}
+.insp dl{display:grid;grid-template-columns:96px 1fr;gap:8px 12px;font:500 12px var(--fm);margin:22px 0;padding:16px 0;border-top:1px solid rgba(12,11,9,.15);border-bottom:1px solid rgba(12,11,9,.15)}
+.insp dt{color:#7a6f60}.insp dd{margin:0;word-break:break-all}
+.insp .txs{list-style:none;padding:0;margin:0 0 20px}
+.insp .txs li{display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed rgba(12,11,9,.18);font-size:15px}
+.insp .txs li:before{content:'tx';font:600 10px var(--fm);background:var(--ink);color:var(--acid);padding:3px 6px;border-radius:5px;height:fit-content;margin-top:2px}
+.insp .lk{display:flex;flex-wrap:wrap;gap:8px}
+.insp .lk a{font:600 13px var(--fd);text-decoration:none;padding:10px 14px;border-radius:999px;background:var(--ink);color:var(--bone)}
+.insp .lk a:hover{background:var(--clay)}
+/* decoder */
+.dec{margin-top:44px;display:grid;grid-template-columns:260px 1fr;gap:26px}
+.terms{display:flex;flex-direction:column;gap:6px}
+.terms button{text-align:left;border:1px solid var(--line);background:none;color:var(--mute);font:500 15px var(--fd);padding:12px 16px;border-radius:14px;cursor:pointer;display:flex;justify-content:space-between;transition:all .2s}
+.terms button:hover{color:var(--bone);border-color:var(--line2)}
+.terms button.on{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+.terms button small{font:600 10.5px var(--fm);opacity:.6}
+.lanes{display:grid;gap:12px}
+.lane{border:1px solid var(--line2);border-radius:20px;padding:20px 22px;position:relative;background:var(--ink2);transition:opacity .3s}
+.lane .lt{font:600 11px var(--fm);text-transform:uppercase;letter-spacing:.12em;display:flex;justify-content:space-between;margin-bottom:10px}
+.lane.d .lt{color:var(--sky)}.lane.p .lt{color:var(--acid)}.lane.n .lt{color:var(--clay)}
+.lane .tx{font-size:clamp(17px,2vw,21px);line-height:1.45;min-height:1.45em}
+.lane.d .tx{font-family:var(--fm);font-size:clamp(14px,1.5vw,16px);color:var(--mute)}
+.lane.p{border-color:rgba(200,255,62,.45)}
+.lane .meter{height:4px;border-radius:4px;background:var(--ink3);margin-top:14px;overflow:hidden}.lane .meter i{display:block;height:100%;background:currentColor;transition:width .8s cubic-bezier(.3,0,.2,1)}
+.lane.d .meter{color:var(--sky)}.lane.p .meter{color:var(--acid)}.lane.n .meter{color:var(--clay)}
+.arrow{text-align:center;font:600 12px var(--fm);color:var(--dim);margin:-4px 0}
+@media(max-width:760px){.dec{grid-template-columns:1fr}.terms{flex-direction:row;overflow-x:auto;padding-bottom:6px}.terms button{flex:none}}
+/* wallet */
+.wal{margin-top:44px;display:grid;grid-template-columns:1.25fr 1fr;gap:22px}
+.card{border:1px solid var(--line2);border-radius:24px;background:var(--ink2);padding:22px;overflow:hidden}
+.wh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.addr{font:600 12px var(--fm);color:var(--mute);background:var(--ink3);padding:6px 10px;border-radius:999px;cursor:pointer}
+.addr:hover{color:var(--acid)}
+.tok{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:13px 6px;border-top:1px solid var(--line);transition:background .2s;border-radius:12px}
+.tok:hover{background:rgba(239,231,218,.04)}
+.tok .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font:700 13px var(--fm);color:var(--ink)}
+.tok b{display:block;font-weight:600}.tok small{color:var(--mute);font-size:13px}
+.tok .r{text-align:right;font:600 12px var(--fm);color:var(--acid)}.tok .r small{display:block;color:var(--dim);font-weight:400}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{border:1px solid var(--line2);border-radius:20px;padding:18px;background:var(--ink2)}
+.stat b{display:block;font:400 46px/1 var(--fs);color:var(--bone)}
+.stat span{font:500 12.5px var(--fd);color:var(--mute)}
+.stat.live b{color:var(--acid)}
+.stat.live span:after{content:' · live';color:var(--acid);font:600 10px var(--fm)}
+@media(max-width:860px){.wal{grid-template-columns:1fr}}
+/* mempool */
+.pool{margin-top:34px;border:1px solid var(--line2);border-radius:24px;overflow:hidden}
+.pool .row{display:grid;grid-template-columns:110px 1fr 120px;gap:14px;padding:13px 20px;border-top:1px solid var(--line);font:500 13px var(--fm);align-items:center;animation:in .5s both}
+.pool .row:first-child{border-top:0}
+.pool .t{color:var(--clay)}.pool .r a{color:var(--bone);text-decoration:none}.pool .r a:hover{color:var(--acid)}.pool .r small{display:block;color:var(--dim);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pool .a{color:var(--dim);text-align:right}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+@media(max-width:620px){.pool .row{grid-template-columns:1fr;gap:4px}.pool .a{text-align:left}}
+/* sign */
+.sign{margin-top:44px;display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.intents{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.intents button{border:1.5px solid var(--line2);background:none;color:var(--bone);font:600 14px var(--fd);padding:10px 16px;border-radius:999px;cursor:pointer;transition:all .2s}
+.intents button.on{background:var(--clay);border-color:var(--clay);color:var(--ink)}
+textarea,input.f{width:100%;background:var(--ink2);border:1px solid var(--line2);border-radius:16px;color:var(--bone);font:400 16px var(--fd);padding:14px 16px;outline:none;resize:vertical}
+textarea:focus,input.f:focus{border-color:var(--acid)}
+input.f{margin-bottom:10px}
+.popup{border-radius:26px;background:var(--bone);color:var(--ink);padding:20px;box-shadow:0 40px 80px -30px rgba(0,0,0,.8);transform:rotate(1.2deg);transition:transform .4s}
+.popup:hover{transform:none}
+.pt{display:flex;justify-content:space-between;align-items:center;font:600 12px var(--fm);color:#7a6f60}
+.pt b{color:var(--ink)}
+.popup h4{font:400 30px/1.05 var(--fs);margin:12px 0}
+.verd{display:flex;gap:10px;align-items:flex-start;background:#163a12;color:#d6ffb0;padding:12px 14px;border-radius:14px;font-size:14px;line-height:1.45}
+.verd i{font-style:normal;font-size:18px}
+.typed{font:400 12px/1.6 var(--fm);background:#e3dacb;border-radius:14px;padding:12px 14px;margin:12px 0;white-space:pre-wrap;word-break:break-word;max-height:220px;overflow:auto}
+.typed .k{color:#7a5a2e}.typed .s{color:#24521d}
+.pbtns{display:grid;grid-template-columns:1fr 1.4fr;gap:8px}
+.pbtns button{border:0;border-radius:999px;padding:14px;font:600 15px var(--fd);cursor:pointer}
+.pbtns .no{background:#ddd3c3;color:var(--ink)}.pbtns .yes{background:var(--ink);color:var(--acid)}
+.pbtns .yes:hover{background:var(--clay);color:var(--ink)}
+.socials{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.socials a{font:600 13px var(--fm);text-decoration:none;color:var(--mute);border-bottom:1px solid var(--line2);padding-bottom:2px}
+.socials a:hover{color:var(--acid);border-color:var(--acid)}
+@media(max-width:860px){.sign{grid-template-columns:1fr}.popup{transform:none}}
+/* terminal */
+.term{position:fixed;left:50%;bottom:24px;transform:translate(-50%,130%);width:min(720px,calc(100% - 24px));height:min(440px,62vh);background:rgba(12,11,9,.97);border:1px solid var(--acid);border-radius:18px;z-index:85;display:flex;flex-direction:column;font:400 13.5px/1.6 var(--fm);transition:transform .45s cubic-bezier(.7,0,.2,1);box-shadow:0 40px 80px -20px rgba(0,0,0,.9)}
+.term.on{transform:translate(-50%,0)}
+.term .tb{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);color:var(--mute);font-size:12px}
+.term .tb button{background:none;border:0;color:var(--mute);cursor:pointer;font:inherit}
+.term .out{flex:1;overflow:auto;padding:12px 16px;color:var(--bone)}
+.term .out .c{color:var(--acid)}.term .out .e{color:var(--clay)}.term .out .m{color:var(--mute)}
+.term .out a{color:var(--sky)}
+.term form{display:flex;gap:8px;padding:10px 16px;border-top:1px solid var(--line)}
+.term form span{color:var(--acid)}
+.term input{flex:1;background:none;border:0;outline:none;color:var(--bone);font:inherit}
+footer{padding:60px clamp(18px,6vw,80px) 50px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px;font:500 12.5px var(--fm);color:var(--dim);max-width:1280px;margin:0 auto}
+footer b{color:var(--mute)}
+.toast{position:fixed;left:50%;top:76px;transform:translate(-50%,-20px);background:var(--acid);color:var(--ink);font:600 13px var(--fd);padding:10px 16px;border-radius:999px;z-index:95;opacity:0;transition:all .3s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .9s,transform .9s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<canvas id="net" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div class="lens" id="lens" aria-hidden="true"></div>
+<div class="tip" id="tip" role="tooltip"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<nav>
+ <a class="logo" href="#top" aria-label="John Enechukwu, home"><i>EJ</i><span>ejc<span style="color:var(--dim)">/scan</span></span></a>
+ <div class="navr">
+  <div class="modes" id="modes" role="tablist" aria-label="How should I explain things?">
+   <span class="pill" id="pill"></span>
+   <button role="tab" data-m="dev">Dev</button><button role="tab" data-m="plain" class="on">Plain</button><button role="tab" data-m="pcm">Pidgin</button>
+  </div>
+  <button class="kbd" id="opent" title="Open the terminal">press /</button>
+ </div>
+</nav>
+
+<main id="top">
+<header class="hero">
+ <div class="meta"><span class="live">block <b id="hb">#0</b></span><span>Warri, Nigeria · UTC+1</span><span id="clock">--:-- WAT</span><span>open to remote roles</span></div>
+ <h1 aria-label="I make Web3 make sense."><span id="h1a">I make Web3</span><span class="l2" id="h1b">make sense.</span></h1>
+ <div class="who">
+  <p class="sub" id="sub" data-k="sub"></p>
+  <div class="id"><strong>John Enechukwu</strong>Web3 educator &amp; builder<br>Founder, NextChain · CTO, PoulCheck</div>
+ </div>
+ <div class="ctas"><a class="btn p" href="#chain" data-hover>Explore the chain ↓</a><a class="btn" href="#sign" data-hover>Sign a message</a></div>
+</header>
+
+<div class="tick" aria-label="Recent activity"><div class="tr" id="tick"></div></div>
+
+<section id="chain" aria-labelledby="ch2">
+ <div class="stick">
+  <div class="head"><div><div class="kick">01 · the chain</div><h2 id="ch2">Everything I've shipped, <em>block by block.</em></h2><p class="lead" data-k="chain"></p></div><div class="prog mono">block <b id="pb">0</b> / <span id="pt">0</span> · tap one to inspect</div></div>
+  <div class="track" id="track"></div>
+ </div>
+</section>
+
+<section class="s rv" id="decode" aria-labelledby="dc2">
+ <div class="kick">02 · the decoder</div>
+ <h2 id="dc2">Same idea. <em>Three languages.</em></h2>
+ <p class="lead" data-k="decoder"></p>
+ <div class="dec">
+  <div class="terms" id="terms" role="tablist" aria-label="Pick a term"></div>
+  <div class="lanes" aria-live="polite">
+   <div class="lane d"><div class="lt"><span>how devs say it</span><span id="jd">jargon 0%</span></div><div class="tx" id="td"></div><div class="meter"><i id="md"></i></div></div>
+   <div class="arrow">↓ translate</div>
+   <div class="lane p"><div class="lt"><span>how I say it</span><span id="jp">jargon 0%</span></div><div class="tx" id="tp"></div><div class="meter"><i id="mp"></i></div></div>
+   <div class="arrow">↓ make e clear</div>
+   <div class="lane n"><div class="lt"><span>how my people say it</span><span>naija pidgin</span></div><div class="tx" id="tn"></div><div class="meter"><i id="mn"></i></div></div>
+  </div>
+ </div>
+</section>
+
+<section class="s rv" id="wallet" aria-labelledby="w2">
+ <div class="kick">03 · the wallet</div>
+ <h2 id="w2">Positions I hold, <em>proof I've earned.</em></h2>
+ <p class="lead" data-k="wallet"></p>
+ <div class="wal">
+  <div class="card">
+   <div class="wh"><b>Holdings</b><span class="addr" id="addr" title="Copy my ETH address">0x487A…83E4 ⧉</span></div>
+   <div id="toks"></div>
+  </div>
+  <div class="stats" id="stats"></div>
+ </div>
+</section>
+
+<section class="s rv" id="mempool" aria-labelledby="m2">
+ <div class="kick">04 · the mempool</div>
+ <h2 id="m2">What I'm pushing <em>right now.</em></h2>
+ <p class="lead" data-k="pool"></p>
+ <div class="pool" id="pool"><div class="row"><span class="t">loading</span><span class="r">reading my public GitHub activity…</span><span class="a"></span></div></div>
+</section>
+
+<section class="s rv" id="sign" aria-labelledby="s2">
+ <div class="kick">05 · say gm</div>
+ <h2 id="s2">The only signature <em>you should ever rush.</em></h2>
+ <p class="lead" data-k="sign"></p>
+ <div class="sign">
+  <div>
+   <div class="intents" id="intents"><button data-i="hire" class="on">Hire me (remote)</button><button data-i="build">Build together</button><button data-i="speak">Speak at your event</button><button data-i="gm">Just gm</button></div>
+   <input class="f" id="from" placeholder="Your name and where you're writing from" aria-label="Your name">
+   <textarea id="msg" rows="5" placeholder="What are we doing together?" aria-label="Your message"></textarea>
+   <div class="socials">
+    <a href="https://x.com/The_Real_EJC" target="_blank" rel="noopener">X @The_Real_EJC</a>
+    <a href="https://github.com/Darkjay123" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/john-enechukwu-a42269360" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://paragraph.com/@therealejc" target="_blank" rel="noopener">Paragraph</a>
+    <a href="mailto:enechukwujohn11@gmail.com">enechukwujohn11@gmail.com</a>
+   </div>
+  </div>
+  <div class="popup" role="dialog" aria-label="Signature request preview">
+   <div class="pt"><span>Signature request</span><b>ejc/scan</b></div>
+   <h4>Send a message to John</h4>
+   <div class="verd"><i>✓</i><div><b>Safe to sign.</b> No money moves, no token approvals, no seed phrase. This only opens your email app with the message below. (If a "signature" ever asks for more than this, it's a drainer.)</div></div>
+   <div class="typed" id="typed"></div>
+   <div class="pbtns"><button class="no" id="rej">Reject</button><button class="yes" id="signb" data-hover>Sign &amp; send ✍️</button></div>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer><span><b>John Enechukwu</b> · built from Warri, Nigeria</span><span>press <b>/</b> for the terminal · <span id="fh">genesis hash …</span></span></footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="insp" id="insp" aria-hidden="true" aria-label="Block details"><button class="x" id="ix" aria-label="Close">✕</button><div id="ib"></div></aside>
+
+<div class="term" id="term" aria-hidden="true">
+ <div class="tb"><span>ejc@warri:~ (type help)</span><button id="tx">esc ✕</button></div>
+ <div class="out" id="out"></div>
+ <form id="tf" autocomplete="off"><span>❯</span><input id="ti" aria-label="Terminal command" spellcheck="false"></form>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let mode='plain';try{mode=localStorage.getItem('ejc_mode')||'plain'}catch(e){}
+
+/* ---------- copy in three registers ---------- */
+const J=(w,p)=>`<span class="j" data-p="${esc(p)}">${w}</span>`;
+const COPY={
+ dev:{sub:()=>`I ship ${J('permissionless','No company has to approve you. Anyone can use it.')} tooling and ${J('L2','A cheaper, faster network built on top of Ethereum.')}-native onboarding for the next 100M users in Africa: ${J('honeypot','A token you can buy but never sell.')} detection, ${J('approval','Permission for an app to move your tokens later.')} decoding, ${J('verifiable credentials','Digital certificates anyone can check are real.')}.`,
+  chain:'Each block below is a shipped artifact, hashed with SHA-256 against the block before it, computed live in your browser. Tamper with history and the chain breaks.',
+  decoder:'Protocol-level definitions on top. Underneath, the same concept compiled down twice: once for a newcomer, once for a Lagos group chat.',
+  wallet:'Roles held, counters read from live sources where they exist. The GitHub figures are fetched from the public API on page load.',
+  pool:'Latest public events from github.com/Darkjay123, pulled client-side. Unauthenticated API, so it may rate-limit.',
+  sign:'An EIP-712-style typed message rendered for humans. The payload only builds a mailto link: zero on-chain side effects.'},
+ plain:{sub:()=>`I take the confusing parts of crypto and say them so anyone gets it. Then I build tools that stop newcomers from losing money to ${J('scams','Tokens or links designed to take your money.')} they couldn't see coming.`,
+  chain:'Scroll sideways through the communities, research and tools I\'ve built. Each one is a "block" linked to the one before it, like a real blockchain. Tap any block to open it.',
+  decoder:'This is the actual job. Pick a word that scares people off crypto and watch it go from developer-speak to plain English to Pidgin.',
+  wallet:'The hats I wear, and the numbers behind them.',
+  pool:'My latest work on GitHub, updating live. If it\'s been quiet for a day, I\'m probably writing.',
+  sign:'Want to work together? Fill this in and "sign" it. Don\'t worry: unlike the scary pop-ups in crypto, this one only opens your email.'},
+ pcm:{sub:()=>`Wetin dey confuse people for crypto, I dey break am down make everybody understand. Then I dey build tools wey go stop new people from losing money to ${J('scam','Token or link wey dem design to collect your money.')} wey dem no see coming.`,
+  chain:'Scroll go side to see the community, research and tools wey I don build. Each one na "block" wey join the one before am, like real blockchain. Tap any block make you see inside.',
+  decoder:'Na this be the work. Pick one word wey dey fear people for crypto, watch am change from developer talk to plain English to Pidgin.',
+  wallet:'The hats wey I dey wear, and the numbers wey back am.',
+  pool:'My latest work for GitHub, e dey update live. If e quiet for one day, I dey write something.',
+  sign:'You wan make we work together? Fill this one and "sign" am. No fear: e no be like those crypto pop-up wey dey drain wallet, this one go only open your email.'}
+};
+function applyMode(m,anim){mode=m;try{localStorage.setItem('ejc_mode',m)}catch(e){}
+ $$('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));movePill();
+ const s=$('#sub');s.innerHTML=COPY[m].sub();if(anim&&!RM){s.animate([{opacity:0,filter:'blur(6px)'},{opacity:1,filter:'none'}],{duration:450})}
+ $$('[data-k]').forEach(e=>{const k=e.dataset.k;if(k!=='sub'&&COPY[m][k]!=null)e.textContent=COPY[m][k]});
+ if(curTerm!=null)showTerm(curTerm,true);bindTips()}
+function movePill(){const b=$('#modes button.on'),p=$('#pill');if(!b)return;p.style.left=b.offsetLeft+'px';p.style.width=b.offsetWidth+'px'}
+$$('#modes button').forEach(b=>b.onclick=()=>applyMode(b.dataset.m,true));addEventListener('resize',movePill);
+
+/* jargon tooltips */
+function bindTips(){const tip=$('#tip');$$('.j').forEach(e=>{if(e._b)return;e._b=1;e.tabIndex=0;
+ const on=()=>{tip.innerHTML=`<b>in plain words</b>${esc(e.dataset.p)}`;const r=e.getBoundingClientRect();tip.style.left=Math.min(innerWidth-275,Math.max(10,r.left))+'px';tip.style.top=(r.bottom+10)+'px';tip.classList.add('on')};
+ const off=()=>tip.classList.remove('on');e.onmouseenter=on;e.onfocus=on;e.onmouseleave=off;e.onblur=off;e.onclick=()=>{tip.classList.contains('on')?off():on()}})}
+
+/* ---------- hero: decrypt the headline ---------- */
+const GL='0123456789abcdef';
+function decrypt(el,text,delay){el.innerHTML='';const spans=[...text].map(c=>{const s=document.createElement('span');s.className='ch';s.textContent=c===' '?'\u00a0':c;el.appendChild(s);return s});
+ if(RM)return;spans.forEach((s,i)=>{const real=s.textContent;if(real==='\u00a0')return;let n=0;s.classList.add('sc');s.textContent=GL[Math.random()*16|0];
+  const iv=setInterval(()=>{n++;if(n>8+i*1.6+delay){clearInterval(iv);s.classList.remove('sc');s.textContent=real}else s.textContent=GL[Math.random()*16|0]},42)})}
+decrypt($('#h1a'),'I make Web3',0);decrypt($('#h1b'),'make sense.',10);
+function tickClock(){const d=new Date(Date.now()+3600e3);$('#clock').textContent=d.toISOString().slice(11,16)+' WAT'}tickClock();setInterval(tickClock,20000);
+
+/* ---------- the chain ---------- */
+const B=[
+ {t:'Genesis',k:'education',y:'2022',d:'Started a B.Sc. in Human Physiology at Delta State University, Abraka. Studying the most complex system there is taught me how to explain hard things to people without the vocabulary.',c:['DELSU Abraka','Human Physiology'],
+  x:['Enrolled in Human Physiology, 2022','Kept building on the side the whole way through']},
+ {t:'Behind the camera',k:'live production',y:'2023 →',d:'Livestream director for Gospel Stars: running cameras, switching, and keeping the stream up when thousands are watching and nothing is allowed to break.',c:['live director','since 2023'],
+  x:['Directing multi-camera live streams','Learned to stay calm when the stream is the product']},
+ {t:'NextChain',k:'community',y:'',d:'Founded a community onboarding young Africans into Web3: learn the basics, build something, find opportunities, meet each other. No hype, no shilling.',c:['200+ onboarded','140 builders'],
+  x:['Onboarded 200+ people into Web3','Grew a builder circle of 140','Runs learning spaces and a Telegram community'],l:[['Website','https://nextchain-ai.vercel.app'],['Telegram','https://t.me/NextchainAicommunity'],['X','https://x.com/Nextchain1']]},
+ {t:'ONBOARD',k:'event',y:'',d:'A NextChain event built for people who had never touched a wallet. Same rule as everything else: if a first-timer can\'t follow, I explained it wrong.',c:['150+ registered','70+ attended'],
+  x:['150+ registrations','70+ people in the room','Most attendees were first-timers']},
+ {t:'Fhenix Nigeria',k:'ecosystem',y:'',d:'Co-founded the Fhenix community in Nigeria, bringing encrypted computation (FHE) to builders here, and became an ambassador for Fhenix, Zo Computer and Trust Wallet.',c:['co-founder','3 ambassador roles'],
+  x:['Co-founded Fhenix Nigeria','Ambassador: Fhenix','Ambassador: Zo Computer','Trust Wallet TrustSquad']},
+ {t:'Making Web3 Make Sense',k:'writing',y:'',d:'Long-running writing series that takes one Web3 idea at a time and says it in plain words. Plus 7 Days of AI and Encrypt*d Conversations.',c:['365-day series','plain language'],
+  x:['365 Days of Making Web3 Make Sense','7 Days of AI','Encrypt*d Conversations'],l:[['Read on Paragraph','https://paragraph.com/@therealejc'],['X','https://x.com/The_Real_EJC']]},
+ {t:'Vybecoderz',k:'internship',y:'Jul–Dec 2025',d:'Six months on a builder team, shipping alongside people who do this for a living.',c:['6 months','2025'],x:['Internship, July to December 2025']},
+ {t:'PoulCheck',k:'startup · CTO',y:'',d:'Co-founder and CTO. A WhatsApp-first screening service for Nigerian poultry farmers, running on our own screening model in production, built on the WhatsApp Cloud API.',c:['co-founder','CTO','own model in prod'],
+  x:['Own screening model in production','WhatsApp Cloud API + webhooks','Security-audited backend'],l:[['poulcheck.xyz','https://poulcheck.xyz']]},
+ {t:'Soulbound Africa',k:'research',y:'',d:'A 62-page research report on verifiable credentials for Africa: how certificates, IDs and records could be held by people themselves and checked by anyone.',c:['62 pages','W3C VC 2.0','SD-JWT'],
+  x:['W3C VC 2.0 + OpenID4VCI','Selective disclosure with SD-JWT','did:web issuers, attestations on L2']},
+ {t:'First Class',k:'graduation',y:'Aug 2026',d:'Finished the B.Sc. in Human Physiology with First Class honours.',c:['First Class','2022–2026'],x:['B.Sc. Human Physiology, First Class']},
+ {t:'nigeria-web3-pulse',k:'open source',y:'2026',d:'A tracker that pulls Nigerian Web3 events and happenings into one place, so builders here stop missing the room.',c:['automation','open source'],x:['Scheduled harvests of NG Web3 events'],l:[['GitHub','https://github.com/Darkjay123/nigeria-web3-pulse']]},
+ {t:'Milestone Escrow',k:'smart contracts',y:'Oct 2026',d:'Security-first milestone escrow on Stellar Soroban: USDC or any SAC token, arbiter disputes, deadline refunds, and no admin keys.',c:['Soroban','no admin keys','live on testnet'],
+  x:['Milestones, disputes, deadline refunds','No admin keys anywhere'],l:[['Live demo','https://darkjay123.github.io/stellar-milestone-escrow/'],['GitHub','https://github.com/Darkjay123/stellar-milestone-escrow']]},
+ {t:'RugRadar',k:'safety tool',y:'Oct 2026',d:'Paste a token, link or the "gem" message from the group chat and get a straight answer before you buy. Rules decide, models only explain, and a test sale checks if you can actually get out.',c:['64 networks','8 languages','MCP Registry'],
+  x:['Simulated buy-and-sell on EVM and TON','Hand-written verdicts in 8 languages','Telegram bot with alerts','Listed on the official MCP Registry'],l:[['Try it','https://rugradar-dun.vercel.app'],['GitHub','https://github.com/Darkjay123/rugradar'],['Telegram bot','https://t.me/RugRadar101bot']]},
+ {t:'WetinSign',k:'safety tool',y:'Oct 2026',d:'Know what you are signing. Plain English and Pidgin explanations of crypto approvals and signature requests, with wallet-drainer flags. Built for Devcenter Hacktober 2026.',c:['53 networks','drainer flags','Hacktober'],
+  x:['Decodes approvals and signature requests','Flags drainer patterns before you sign'],l:[['GitHub','https://github.com/Darkjay123/wetinsign']]},
+ {t:'Hackathon sprint',k:'builds',y:'Sep–Oct 2026',d:'A run of builds aimed at real people: Ponzi-pitch warnings, remittance comparisons, and voice bookkeeping for cash traders.',c:['ShineEye','SendHome','VoiceLedger'],
+  x:['ShineEye: Ponzi warning signs with the money maths','SendHome: which transfer actually delivers the most','VoiceLedger: speak a sale, get clean books','AI Church OS: offline sermon transcription'],l:[['ShineEye','https://github.com/Darkjay123/shineeye'],['SendHome','https://github.com/Darkjay123/sendhome'],['VoiceLedger','https://github.com/Darkjay123/voiceledger']]}
+];
+const sha=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+async function buildChain(){let prev='0'.repeat(64);
+ for(let i=0;i<B.length;i++){const b=B[i];b.prev=prev;b.hash=crypto.subtle?await sha(prev+b.t+b.d):(Math.random().toString(16).slice(2)+'0'.repeat(64)).slice(0,64);prev=b.hash}
+ $('#track').innerHTML=B.map((b,i)=>`<article class="blk" data-i="${i}" tabindex="0" data-hover aria-label="Block ${i}: ${esc(b.t)}">
+  <div class="bh"><span class="n">#${String(i).padStart(3,'0')}</span><span class="st" id="st${i}">pending</span></div>
+  <div class="hash">hash <span>${b.hash.slice(0,20)}…</span><br>prev ${b.prev.slice(0,20)}…</div>
+  <div class="kind">${esc(b.k)}</div><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p>
+  <div class="chips">${b.c.map(c=>`<span>${esc(c)}</span>`).join('')}</div>${b.y?`<span class="yr">${esc(b.y)}</span>`:''}</article>`).join('');
+ $('#pt').textContent=B.length-1;$('#fh').textContent='genesis '+B[0].hash.slice(0,12)+'…';$('#hb').textContent='#'+(B.length-1);
+ $$('.blk').forEach(e=>{e.onclick=()=>inspect(+e.dataset.i);e.onkeydown=k=>{if(k.key==='Enter')inspect(+e.dataset.i)}});
+ const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){mine(+en.target.dataset.i);io.unobserve(en.target)}}),{threshold:.5});$$('.blk').forEach(e=>io.observe(e));
+ hover();sizeChain();renderTick()}
+function mine(i){const s=$('#st'+i);if(!s||s.dataset.done)return;s.dataset.done=1;if(RM){s.textContent='confirmed ✓';s.classList.add('ok');return}
+ let n=0;const iv=setInterval(()=>{n+=Math.random()*9973|0;s.textContent='nonce '+n;},50);setTimeout(()=>{clearInterval(iv);s.textContent='confirmed ✓';s.classList.add('ok')},700+Math.random()*700)}
+function inspect(i){const b=B[i];$('#ib').innerHTML=`<div class="bn">BLOCK #${String(i).padStart(3,'0')} · ${esc(b.k)}</div><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p>
+ <dl><dt>status</dt><dd>confirmed ✓</dd><dt>hash</dt><dd>${b.hash}</dd><dt>prev hash</dt><dd>${b.prev}</dd>${b.y?`<dt>time</dt><dd>${esc(b.y)}</dd>`:''}<dt>txs</dt><dd>${b.x.length}</dd></dl>
+ <ul class="txs">${b.x.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>${b.l?`<div class="lk">${b.l.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('')}</div>`:''}`;
+ $('#insp').classList.add('on');$('#insp').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>$('#ix').focus(),300)}
+function closeInsp(){$('#insp').classList.remove('on');$('#insp').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on')}
+$('#ix').onclick=closeInsp;$('#scrim').onclick=closeInsp;
+/* pinned horizontal scroll */
+let chainH=0;function sizeChain(){const sec=$('#chain'),tr=$('#track');if(innerWidth<=760){sec.style.height='auto';tr.style.transform='none';return}
+ const extra=Math.max(0,tr.scrollWidth-innerWidth);chainH=extra;sec.style.height=(innerHeight+extra)+'px';onScroll()}
+function onScroll(){if(innerWidth<=760)return;const sec=$('#chain'),r=sec.getBoundingClientRect();const p=Math.min(1,Math.max(0,-r.top/Math.max(1,chainH)));
+ $('#track').style.transform=`translateX(${-p*chainH}px)`;$('#pb').textContent=Math.round(p*(B.length-1))}
+addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',sizeChain);
+
+/* ---------- decoder ---------- */
+const TERMS=[
+ ['Seed phrase','BIP-39 mnemonic encoding the master seed of a hierarchical-deterministic wallet; every private key derives from it.','The 12 or 24 words that ARE your wallet. Anyone who has them owns everything in it. No real support team will ever ask for them.','Na those 12 words be your wallet. Anybody wey see am don own your money. Nobody, even "customer care", suppose ask you for am.',92,8],
+ ['Gas fee','Fee paid in the chain\'s native asset for the computation and storage your transaction consumes, priced per unit of gas.','The small fee the network charges to process your transaction. Think of it like a bank transfer charge.','Na the small charge wey network dey collect to carry your transaction go. E be like bank transfer charge.',85,6],
+ ['Rug pull','Deployer removes pool liquidity or dumps a privileged allocation after inflows, collapsing the price.','The creator pulls the money out of the trading pool and disappears, leaving everyone holding worthless tokens.','Creator carry the money comot from the pool, japa, leave everybody hold token wey no get value again.',80,10],
+ ['Honeypot','Contract logic or a transfer hook that reverts sells from non-whitelisted addresses while allowing buys.','A token you can buy but can never sell. Your money goes in and stays there.','Token wey you go fit buy, but you no go ever fit sell. Your money enter, e no go comot.',94,5],
+ ['Token approval','ERC-20 approve() granting a spender an allowance over your balance, often type(uint256).max.','Permission you give an app to move your tokens later, sometimes with no limit. Drainers live on these.','You dey give app permission make e fit carry your token later, sometimes without limit. Na so wallet drainer dey work.',90,9],
+ ['Layer 2','Execution layer that batches transactions off L1 and posts data and proofs back to Ethereum for settlement.','A faster, cheaper lane built on top of Ethereum that still leans on Ethereum for security.','Na express road wey dem build on top Ethereum: e fast, e cheap, but Ethereum still dey guard am.',88,7],
+ ['FHE','Fully homomorphic encryption: arbitrary computation over ciphertexts whose decrypted result matches computing on plaintext.','Doing maths on data while it stays locked, so nobody, not even the computer doing the work, can see it.','Computer go calculate your data while e still lock, so nobody go see wetin dey inside, even the computer sef.',97,8],
+ ['Verifiable credential','W3C VC 2.0 signed attestation bound to a DID, selectively disclosable via SD-JWT.','A digital certificate you keep yourself. Anyone can check it\'s real, and you can show only the part they need.','Na certificate wey you hold for your phone. Anybody fit confirm say e real, and you fit show only the part wey dem need.',95,9]
+];
+let curTerm=null,tyT=[];
+function type(el,text,speed){el.textContent='';if(RM){el.textContent=text;return}let i=0;const t=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length)clearInterval(t)},speed);tyT.push(t)}
+function showTerm(i,quiet){curTerm=i;tyT.forEach(clearInterval);tyT=[];const t=TERMS[i];$$('#terms button').forEach((b,j)=>b.classList.toggle('on',j===i));
+ type($('#td'),t[1],quiet?0:9);setTimeout(()=>type($('#tp'),t[2],quiet?0:14),quiet?0:350);setTimeout(()=>type($('#tn'),t[3],quiet?0:14),quiet?0:700);
+ $('#md').style.width=t[4]+'%';$('#mp').style.width=t[5]+'%';$('#mn').style.width=Math.max(2,t[5]-3)+'%';$('#jd').textContent='jargon '+t[4]+'%';$('#jp').textContent='jargon '+t[5]+'%'}
+$('#terms').innerHTML=TERMS.map((t,i)=>`<button role="tab" data-hover>${esc(t[0])}<small>${String(i+1).padStart(2,'0')}</small></button>`).join('');
+$$('#terms button').forEach((b,i)=>b.onclick=()=>showTerm(i));
+
+/* ---------- wallet ---------- */
+const TOK=[['CTO','#c8ff3e','PoulCheck','co-founder & CTO','1.00','active'],['FNDR','#ff6a2b','NextChain','founder','200+','onboarded'],['FHNX','#7cc7ff','Fhenix Nigeria','co-founder','1.00','active'],['AMB','#efe7da','Fhenix · Zo · Trust Wallet','ambassador','3','roles'],['INK','#d7a7ff','Writing','Paragraph, X, LinkedIn','365','day series'],['LANG','#ffd23e','English · French · Pidgin','C2 · B2 · native','3','languages']];
+$('#toks').innerHTML=TOK.map(t=>`<div class="tok"><div class="ic" style="background:${t[1]}">${t[0]}</div><div><b>${esc(t[2])}</b><small>${esc(t[3])}</small></div><div class="r">${esc(t[4])}<small>${esc(t[5])}</small></div></div>`).join('');
+$('#addr').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText('0x487Ad126E27B74AAE4faE11b72c240fd5a5283E4');toast('ETH address copied. gm 🫡')};
+const STATS=[['repos','—','public repos on GitHub',1],['push','—','since my last push',1],['200+','','people onboarded into Web3'],['64','','networks RugRadar checks'],['8','','languages, hand-written'],['62','','pages of VC research']];
+$('#stats').innerHTML=STATS.map(s=>`<div class="stat${s[3]?' live':''}" id="s_${s[0].replace(/\W/g,'')}"><b>${s[3]?s[1]:s[0]}</b><span>${s[2]}</span></div>`).join('');
+function ago(d){const s=(Date.now()-new Date(d))/1000;return s<3600?Math.max(1,s/60|0)+'m':s<86400?(s/3600|0)+'h':(s/86400|0)+'d'}
+function count(el,to){if(RM){el.textContent=to;return}let v=0;const st=performance.now();const f=n=>{const p=Math.min(1,(n-st)/1100);el.textContent=Math.round(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)}
+
+/* ---------- live GitHub: stats, mempool, ticker ---------- */
+const GH='https://api.github.com/users/Darkjay123';let EV=[];
+const KIND={PushEvent:'push',CreateEvent:'create',PullRequestEvent:'pr',IssuesEvent:'issue',ReleaseEvent:'release',WatchEvent:'star',ForkEvent:'fork',PublicEvent:'open-sourced',IssueCommentEvent:'comment',DeleteEvent:'cleanup'};
+function evText(e){const p=e.payload||{};if(e.type==='PushEvent'){const c=(p.commits||[]).slice(-1)[0];return c?c.message.split('\n')[0]:`pushed ${p.size||''} commit(s)`}
+ if(e.type==='CreateEvent')return `created ${p.ref_type}${p.ref?' '+p.ref:''}`;if(e.type==='PullRequestEvent')return `${p.action} PR: ${(p.pull_request||{}).title||''}`;if(e.type==='ReleaseEvent')return `released ${(p.release||{}).tag_name||''}`;return (KIND[e.type]||e.type).replace('Event','')}
+fetch(GH).then(r=>r.ok?r.json():null).then(u=>{if(!u)return;const el=$('#s_repos b');if(el)count(el,u.public_repos)}).catch(()=>{});
+fetch(GH+'/events/public?per_page=40').then(r=>r.ok?r.json():Promise.reject()).then(ev=>{EV=ev.filter(e=>e.repo&&!/^\./.test(e.repo.name));
+ const last=EV.find(e=>e.type==='PushEvent');if(last)$('#s_push b').textContent=ago(last.created_at);
+ $('#pool').innerHTML=EV.slice(0,9).map((e,i)=>`<div class="row" style="animation-delay:${i*.05}s"><span class="t">${esc(KIND[e.type]||'event')}</span><span class="r"><a href="https://github.com/${esc(e.repo.name)}" target="_blank" rel="noopener">${esc(e.repo.name.split('/')[1])}</a><small>${esc(evText(e))}</small></span><span class="a">${ago(e.created_at)} ago</span></div>`).join('')||'<div class="row"><span class="t">quiet</span><span class="r">No public activity in the last few days.</span><span class="a"></span></div>';renderTick()})
+ .catch(()=>{$('#pool').innerHTML=`<div class="row"><span class="t">offline</span><span class="r">GitHub's public API is rate-limiting this browser. <a href="https://github.com/Darkjay123" target="_blank" rel="noopener">See it on GitHub ↗</a></span><span class="a"></span></div>`;$('#s_push b').textContent='↗'});
+function renderTick(){const items=[...EV.slice(0,6).map(e=>`<span><i>${esc(KIND[e.type]||'evt')}</i> ${esc(e.repo.name.split('/')[1])} · ${ago(e.created_at)} ago</span>`),...B.map((b,i)=>`<span><b>#${String(i).padStart(3,'0')}</b> ${esc(b.t)}</span>`)];$('#tick').innerHTML=items.join('')+items.join('')}
+
+/* ---------- sign a message ---------- */
+const INT={hire:['Remote role','Hi John, we have a remote role you might fit:'],build:['Build together','Hi John, I want to build something with you:'],speak:['Speaking invite','Hi John, we would love you to speak at:'],gm:['gm','gm John 🫡']};let intent='hire';
+function renderTyped(){const from=$('#from').value.trim()||'anon',msg=$('#msg').value.trim()||INT[intent][1];
+ const kv=(k,v)=>`  <span class="k">"${k}"</span>: <span class="s">"${esc(v)}"</span>`;
+ $('#typed').innerHTML=`{\n${kv('to','John Enechukwu')},\n${kv('intent',INT[intent][0])},\n${kv('from',from)},\n${kv('message',msg.length>220?msg.slice(0,220)+'…':msg)},\n${kv('value','0')},\n${kv('approvals','none')}\n}`}
+$$('#intents button').forEach(b=>b.onclick=()=>{intent=b.dataset.i;$$('#intents button').forEach(x=>x.classList.toggle('on',x===b));renderTyped()});
+$('#from').oninput=renderTyped;$('#msg').oninput=renderTyped;renderTyped();
+$('#signb').onclick=()=>{const from=$('#from').value.trim(),msg=$('#msg').value.trim()||INT[intent][1];
+ location.href=`mailto:enechukwujohn11@gmail.com?subject=${encodeURIComponent('['+INT[intent][0]+'] from '+(from||'your portfolio'))}&body=${encodeURIComponent(msg+'\n\n'+(from?'— '+from:''))}`;toast('Signed. Opening your email app ✍️')};
+$('#rej').onclick=()=>toast('Rejected. Good instinct. Always read before you sign.');
+
+/* ---------- terminal ---------- */
+const out=$('#out');let hist=[],hi=0;
+function say(h,c){const d=document.createElement('div');if(c)d.className=c;d.innerHTML=h;out.appendChild(d);out.scrollTop=out.scrollHeight}
+const CMD={
+ help:()=>say('<span class="m">commands:</span> whoami · ls · open &lt;block&gt; · decode &lt;term&gt; · mode dev|plain|pidgin · hire · socials · gm · clear · exit'),
+ whoami:()=>say('John Enechukwu (EJC). Web3 educator and builder from Warri, Nigeria. Web3 is home base, AI is what I build with, Africa is the market. Founder of NextChain, co-founder and CTO of PoulCheck.'),
+ ls:()=>say(B.map((b,i)=>`<span class="c">#${String(i).padStart(3,'0')}</span> ${esc(b.t)}`).join('<br>')),
+ open:a=>{const q=(a||'').toLowerCase();const i=B.findIndex((b,j)=>String(j)===q||b.t.toLowerCase().includes(q));if(!q||i<0)return say('usage: open rugradar  (or a block number)','e');closeTerm();inspect(i)},
+ decode:a=>{const q=(a||'').toLowerCase();const i=TERMS.findIndex(t=>t[0].toLowerCase().includes(q));if(!q||i<0)return say('try: decode honeypot','e');closeTerm();location.hash='decode';setTimeout(()=>showTerm(i),500)},
+ mode:a=>{const m={dev:'dev',plain:'plain',pidgin:'pcm',pcm:'pcm'}[(a||'').toLowerCase()];if(!m)return say('mode dev | plain | pidgin','e');applyMode(m,true);say('switched. scroll to see it.','m')},
+ hire:()=>{say('Open to remote roles: DevRel, ecosystem and partnerships, community, product engineering. Opening the signature request…','c');closeTerm();intent='hire';$$('#intents button').forEach(x=>x.classList.toggle('on',x.dataset.i==='hire'));renderTyped();$('#sign').scrollIntoView({behavior:'smooth'})},
+ socials:()=>say('<a href="https://x.com/The_Real_EJC" target="_blank">x.com/The_Real_EJC</a><br><a href="https://github.com/Darkjay123" target="_blank">github.com/Darkjay123</a><br><a href="https://www.linkedin.com/in/john-enechukwu-a42269360" target="_blank">linkedin</a><br><a href="https://paragraph.com/@therealejc" target="_blank">paragraph.com/@therealejc</a>'),
+ gm:()=>say('gm gm. how far? 🫡','c'),
+ sudo:()=>say('nice try. this is the one machine where you don\'t get root. 😅','e'),
+ clear:()=>{out.innerHTML=''},exit:()=>closeTerm()
+};
+function run(line){const [c,...a]=line.trim().split(/\s+/);if(!c)return;say(`<span class="c">❯</span> ${esc(line)}`);const f=CMD[c.toLowerCase()];f?f(a.join(' ')):say(`command not found: ${esc(c)}. type <span class="c">help</span>`,'e')}
+function openTerm(){$('#term').classList.add('on');$('#term').setAttribute('aria-hidden','false');if(!out.children.length){say('ejc/scan terminal · built in Warri','m');CMD.help()}setTimeout(()=>$('#ti').focus(),200)}
+function closeTerm(){$('#term').classList.remove('on');$('#term').setAttribute('aria-hidden','true')}
+$('#tf').onsubmit=e=>{e.preventDefault();const v=$('#ti').value;if(v.trim()){hist.push(v);hi=hist.length}$('#ti').value='';run(v)};
+$('#ti').onkeydown=e=>{if(e.key==='ArrowUp'&&hi>0){$('#ti').value=hist[--hi]}else if(e.key==='ArrowDown'){hi=Math.min(hist.length,hi+1);$('#ti').value=hist[hi]||''}};
+$('#opent').onclick=openTerm;$('#tx').onclick=closeTerm;
+addEventListener('keydown',e=>{const typing=/input|textarea/i.test(document.activeElement.tagName);if((e.key==='/'||e.key==='`')&&!typing){e.preventDefault();openTerm()}if(e.key==='Escape'){closeTerm();closeInsp()}});
+
+/* ---------- background network ---------- */
+(()=>{const c=$('#net'),x=c.getContext('2d');let W,H,P=[],m={x:-999,y:-999};const dpr=Math.min(2,devicePixelRatio||1);
+ function size(){W=c.width=innerWidth*dpr;H=c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';const n=Math.min(90,Math.round(innerWidth*innerHeight/16000));P=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25*dpr,vy:(Math.random()-.5)*.25*dpr,h:Math.random()<.12}))}
+ size();addEventListener('resize',size);addEventListener('pointermove',e=>{m.x=e.clientX*dpr;m.y=e.clientY*dpr});
+ const R=130*dpr;function f(){x.clearRect(0,0,W,H);for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=m.x-p.x,dy=m.y-p.y,d=Math.hypot(dx,dy);if(d<R*1.4){p.x+=dx*.004;p.y+=dy*.004}}
+  for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const a=P[i],b=P[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<R){x.strokeStyle=`rgba(239,231,218,${(1-d/R)*.13})`;x.lineWidth=dpr;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}
+  for(const p of P){const near=Math.hypot(m.x-p.x,m.y-p.y)<R;x.fillStyle=p.h?'rgba(255,106,43,.8)':near?'rgba(200,255,62,.9)':'rgba(239,231,218,.35)';x.fillRect(p.x-2*dpr,p.y-2*dpr,4*dpr,4*dpr)}
+  if(!RM)requestAnimationFrame(f)}f()})();
+
+/* ---------- cursor lens, reveal, toast ---------- */
+const lens=$('#lens');addEventListener('pointermove',e=>{lens.style.left=e.clientX+'px';lens.style.top=e.clientY+'px'});
+function hover(){$$('a,button,[data-hover],.j').forEach(e=>{if(e._h)return;e._h=1;e.addEventListener('pointerenter',()=>lens.classList.add('big'));e.addEventListener('pointerleave',()=>lens.classList.remove('big'))})}
+const rio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');if(e.target.id==='decode'&&curTerm==null)showTerm(0);if(e.target.id==='wallet')$$('.stat:not(.live) b').forEach(b=>{const n=parseInt(b.textContent);if(!isNaN(n)&&!b.dataset.c){b.dataset.c=1;const plus=b.textContent.includes('+');count(b,n);if(plus)setTimeout(()=>b.textContent=n+'+',1200)}});rio.unobserve(e.target)}}),{threshold:.18});
+$$('.rv').forEach(e=>rio.observe(e));
+let tt;function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2400)}
+applyMode(mode,false);buildChain();hover();
+console.log('%cgm 👋 curious one. press / on the page for the terminal.','font:600 14px monospace;color:#c8ff3e;background:#0c0b09;padding:8px 12px;border-radius:8px');
+</script>
+</body>
+</html>
