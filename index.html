@@ -321,6 +321,13 @@ body{top:0!important}.goog-text-highlight{background:none!important;box-shadow:n
  footer{padding:40px 18px 30px;flex-direction:column}
 }
 @media(hover:none){.blk:hover,.btn:hover,.reel button:hover,.tile:hover{transform:none}}
+
+/* nothing parked off-screen may widen the page on phones */
+html{overflow-x:clip}
+.insp:not(.on){visibility:hidden;transition:transform .5s cubic-bezier(.7,0,.2,1),visibility 0s .5s}
+.term:not(.on){visibility:hidden;transition:transform .45s cubic-bezier(.7,0,.2,1),visibility 0s .45s}
+.tcard:not(.on),.invite:not(.on){visibility:hidden}
+.invite:not(.on){transition:transform .5s cubic-bezier(.6,0,.2,1),visibility 0s .5s}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
