@@ -276,6 +276,51 @@ body{top:0!important}.goog-text-highlight{background:none!important;box-shadow:n
 .toast{position:fixed;left:50%;top:76px;transform:translate(-50%,-20px);background:var(--acid);color:var(--ink);font:600 13px var(--fd);padding:10px 16px;border-radius:999px;z-index:95;opacity:0;transition:all .3s;pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .rv{opacity:0;transform:translateY(26px);transition:opacity .9s,transform .9s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
+
+/* ---------- phones ---------- */
+.tbtn{display:none}
+@media(max-width:900px){
+ body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+ .rail{bottom:calc(10px + env(safe-area-inset-bottom));max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+ .rail::-webkit-scrollbar{display:none}
+ .rail a{padding:7px 10px;flex:none}
+ .rail a[data-s="top"]{display:none}
+ .invite{bottom:calc(72px + env(safe-area-inset-bottom))}
+ .term{bottom:calc(70px + env(safe-area-inset-bottom));height:min(420px,58vh)}
+}
+@media(max-width:620px){
+ nav{padding:10px 12px;gap:8px}
+ .navr{gap:6px}
+ .modes button{padding:7px 11px}
+ .tbtn{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--line2);background:rgba(21,19,15,.8);color:var(--mute);font:600 13px var(--fm);cursor:pointer}
+ .hero{padding:92px 18px 40px;min-height:auto}
+ .meta{font-size:11px;gap:6px 12px;margin-bottom:18px}
+ h1{font-size:clamp(46px,14vw,64px)}
+ .sub{font-size:17px;min-height:0}
+ .who{margin-top:22px;gap:16px}
+ .ctas{margin-top:24px}.ctas .btn{flex:1;justify-content:center;padding:13px 16px}
+ section.s{padding:72px 18px}
+ #chain .stick{padding:72px 0 24px}
+ #chain .head{padding:0 18px}
+ .track{padding:0 18px;gap:18px}
+ .blk{padding:18px;min-height:0}.blk .wm{font-size:96px}.blk h3{font-size:30px}
+ .blk:after{bottom:-19px;height:19px}
+ h2{font-size:clamp(36px,11vw,52px)}
+ .dec{margin-top:28px;gap:16px}.lane{padding:16px}
+ .wal,.stu,.sign{margin-top:28px}
+ .stats{gap:10px}.stat{padding:14px}.stat b{font-size:38px}
+ .tok{grid-template-columns:40px 1fr auto;gap:10px}.tok .ic{width:40px;height:40px;font-size:11px}
+ .card{padding:16px}
+ .reel button{flex:0 0 170px}
+ .player .play{width:62px;height:62px}.player .ov{padding:16px}
+ .insp{padding:22px 18px calc(30px + env(safe-area-inset-bottom))}.insp h3{font-size:40px}
+ .term input{font-size:16px}
+ .tcard{padding:16px}
+ .popup{padding:16px}.typed{font-size:11.5px}
+ .tick .tr{animation-duration:90s}
+ footer{padding:40px 18px 30px;flex-direction:column}
+}
+@media(hover:none){.blk:hover,.btn:hover,.reel button:hover,.tile:hover{transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
@@ -299,7 +344,7 @@ body{top:0!important}.goog-text-highlight{background:none!important;box-shadow:n
   </div>
   <div class="lm notranslate" id="lm" translate="no"><button class="lmb" id="lmb" aria-haspopup="listbox" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg><span id="lmn">English</span></button><div class="lmp" id="lmp" hidden role="listbox"></div></div>
   <button class="navbtn" id="tourb" title="Take the guided tour">Tour</button>
-  <button class="kbd" id="opent" title="Open the terminal">press /</button>
+  <button class="kbd" id="opent" title="Open the terminal">press /</button><button class="tbtn" id="opent2" aria-label="Open the terminal">&gt;_</button>
  </div>
 </nav>
 
@@ -601,17 +646,17 @@ function openTerm(){$('#term').classList.add('on');$('#term').setAttribute('aria
 function closeTerm(){$('#term').classList.remove('on');$('#term').setAttribute('aria-hidden','true')}
 $('#tf').onsubmit=e=>{e.preventDefault();const v=$('#ti').value;if(v.trim()){hist.push(v);hi=hist.length}$('#ti').value='';run(v)};
 $('#ti').onkeydown=e=>{if(e.key==='ArrowUp'&&hi>0){$('#ti').value=hist[--hi]}else if(e.key==='ArrowDown'){hi=Math.min(hist.length,hi+1);$('#ti').value=hist[hi]||''}};
-$('#opent').onclick=openTerm;$('#tx').onclick=closeTerm;
+$('#opent').onclick=openTerm;$('#opent2').onclick=openTerm;$('#tx').onclick=closeTerm;
 addEventListener('keydown',e=>{const typing=/input|textarea/i.test(document.activeElement.tagName);if((e.key==='/'||e.key==='`')&&!typing){e.preventDefault();openTerm()}if(e.key==='Escape'){closeTerm();closeInsp()}});
 
 /* ---------- background network ---------- */
 (()=>{const c=$('#net'),x=c.getContext('2d');let W,H,P=[],m={x:-999,y:-999};const dpr=Math.min(2,devicePixelRatio||1);
- function size(){W=c.width=innerWidth*dpr;H=c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';const n=Math.min(90,Math.round(innerWidth*innerHeight/16000));P=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25*dpr,vy:(Math.random()-.5)*.25*dpr,h:Math.random()<.12}))}
- size();addEventListener('resize',size);addEventListener('pointermove',e=>{m.x=e.clientX*dpr;m.y=e.clientY*dpr});
+ function size(){W=c.width=innerWidth*dpr;H=c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';const n=Math.min(innerWidth<620?36:90,Math.round(innerWidth*innerHeight/16000));P=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25*dpr,vy:(Math.random()-.5)*.25*dpr,h:Math.random()<.12}))}
+ let lw=innerWidth;size();addEventListener('resize',()=>{if(innerWidth!==lw||innerWidth>900){lw=innerWidth;size()}});addEventListener('pointermove',e=>{m.x=e.clientX*dpr;m.y=e.clientY*dpr});
  const R=130*dpr;function f(){x.clearRect(0,0,W,H);for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=m.x-p.x,dy=m.y-p.y,d=Math.hypot(dx,dy);if(d<R*1.4){p.x+=dx*.004;p.y+=dy*.004}}
   for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const a=P[i],b=P[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<R){x.strokeStyle=`rgba(239,231,218,${(1-d/R)*.13})`;x.lineWidth=dpr;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}
   for(const p of P){const near=Math.hypot(m.x-p.x,m.y-p.y)<R;x.fillStyle=p.h?'rgba(255,106,43,.8)':near?'rgba(200,255,62,.9)':'rgba(239,231,218,.35)';x.fillRect(p.x-2*dpr,p.y-2*dpr,4*dpr,4*dpr)}
-  if(!RM)requestAnimationFrame(f)}f()})();
+  if(!RM&&!document.hidden)requestAnimationFrame(f)}f();document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!RM)requestAnimationFrame(f)})})();
 
 /* ---------- cursor lens, reveal, toast ---------- */
 const lens=$('#lens');addEventListener('pointermove',e=>{lens.style.left=e.clientX+'px';lens.style.top=e.clientY+'px'});
@@ -650,7 +695,7 @@ let curV=0;
 function thumb(id,q){return `https://i.ytimg.com/vi/${id}/${q||'hqdefault'}.jpg`}
 function cue(i,play){curV=i;const [id,day,t,d]=VIDS[i],pl=$('#player');
  if(play){pl.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1" title="${t.replace(/"/g,'&quot;')}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>`;pl.style.cursor='default'}
- else{pl.style.cursor='pointer';pl.innerHTML=`<img src="${thumb(id,'maxresdefault')}" onerror="this.onerror=null;this.src='${thumb(id)}'" alt=""><div class="ov"><span class="play" aria-hidden="true"></span><span class="day notranslate" translate="no">DAY ${day}/365 · ${d}</span><h3>${t}</h3></div>`;pl.setAttribute('role','button');pl.setAttribute('aria-label','Play: '+t)}
+ else{pl.style.cursor='pointer';pl.innerHTML=`<img src="${thumb(id,innerWidth<700?'hqdefault':'maxresdefault')}" onerror="this.onerror=null;this.src='${thumb(id)}'" alt=""><div class="ov"><span class="play" aria-hidden="true"></span><span class="day notranslate" translate="no">DAY ${day}/365 · ${d}</span><h3>${t}</h3></div>`;pl.setAttribute('role','button');pl.setAttribute('aria-label','Play: '+t)}
  $$('#reel button').forEach((b,j)=>b.classList.toggle('on',j===i))}
 $('#player').addEventListener('click',()=>{if(!$('#player iframe'))cue(curV,true)});
 $('#player').tabIndex=0;$('#player').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!$('#player iframe')){e.preventDefault();cue(curV,true)}});
@@ -688,14 +733,14 @@ const TOUR=[
  {sel:'#wallet .wal',go:'#wallet',t:'04 · The wallet',b:'The roles John holds and the numbers behind them. The GitHub figures update live.'},
  {sel:'#mempool .pool',go:'#mempool',t:'05 · Live activity',b:'What John is shipping on GitHub right now, straight from the source.'},
  {sel:'#sign .sign',go:'#sign',t:'06 · Say gm',b:'Want to work together? Fill this in and press Sign. Nothing touches a wallet; it just opens an email to John.'},
- {sel:'#opent',t:'One last secret',b:'Press / any time (or tap here) for a terminal. Type help to explore. That\u2019s the tour: enjoy!'}];
+ {sel:innerWidth<=620?'#opent2':'#opent',t:'One last secret',b:'Press / any time (or tap here) for a terminal. Type help to explore. That\u2019s the tour: enjoy!'}];
 let ti=-1;const spot=$('#spot'),tc=$('#tcard');
 function vis(el){if(!el)return false;const r=el.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(el).visibility!=='hidden'}
 function steps(){return TOUR.filter(st=>!st.sel||vis($(st.sel))||st.go)}
 function startTour(){$('#invite').classList.remove('on');try{localStorage.setItem('ejc_tour','1')}catch(e){}ti=0;showStep()}
 function endTour(){ti=-1;spot.classList.remove('on');tc.classList.remove('on');document.removeEventListener('keydown',tourKey)}
 function tourKey(e){if(ti<0)return;if(e.key==='Escape')endTour();if(e.key==='ArrowRight')nextStep(1);if(e.key==='ArrowLeft')nextStep(-1)}
-function nextStep(d){const L=steps().length;ti+=d;if(ti>=L)return endTour();if(ti<0)ti=0;showStep()}
+function nextStep(d){if(ti<0)return;const L=steps().length;ti+=d;if(ti>=L)return endTour();if(ti<0)ti=0;showStep()}
 function showStep(){const S=steps(),st=S[ti],L=S.length;document.addEventListener('keydown',tourKey);
  tc.innerHTML=`<div class="ts"><span>STEP ${ti+1} / ${L}</span><span>esc to close</span></div><h4>${st.t}</h4><p>${st.b}</p><div class="dots">${S.map((_,i)=>`<i class="${i===ti?'on':''}"></i>`).join('')}</div><div class="tb2"><button class="sk">${ti===L-1?'':'Skip tour'}</button><span>${ti>0?'<button class="bk">Back</button>':''}<button class="nx">${ti===L-1?'Let\u2019s go':ti===0?'Show me':'Next'}</button></span></div>`;
  tc.querySelector('.nx').onclick=()=>nextStep(1);const bk=tc.querySelector('.bk');if(bk)bk.onclick=()=>nextStep(-1);tc.querySelector('.sk').onclick=endTour;
