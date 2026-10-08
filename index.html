@@ -114,6 +114,7 @@ h2 em{color:var(--acid)}
 .insp .txs{list-style:none;padding:0;margin:0 0 20px}
 .insp .txs li{display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed rgba(12,11,9,.18);font-size:15px}
 .insp .txs li:before{content:'tx';font:600 10px var(--fm);background:var(--ink);color:var(--acid);padding:3px 6px;border-radius:5px;height:fit-content;margin-top:2px}
+.insp .vid{width:100%;aspect-ratio:16/9;border-radius:16px;background:#000;display:block;margin:0 0 18px;object-fit:cover}
 .insp .gal{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 20px}.insp .gal a{display:block;border-radius:14px;overflow:hidden;aspect-ratio:16/10;background:#d9cfbf}.insp .gal img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}.insp .gal a:hover img{transform:scale(1.05)}
 .insp .lk{display:flex;flex-wrap:wrap;gap:8px}
 .insp .lk a{font:600 13px var(--fd);text-decoration:none;padding:10px 14px;border-radius:999px;background:var(--ink);color:var(--bone)}
@@ -473,7 +474,9 @@ const B=[
  {t:'NextChain',k:'community',y:'2024 →',d:'Founded a community onboarding young Africans into Web3: learn the basics, build something, find opportunities, meet each other. No hype, no shilling.',c:['200+ onboarded','since 2024'],
   x:['Founded in 2024','Onboarded 200+ people into Web3','7 Days of AI: six X Spaces plus a workshop, 140 builders','Runs learning spaces and a Telegram community'],l:[['Website','https://nextchain-ai.vercel.app'],['Telegram','https://t.me/NextchainAicommunity'],['X','https://x.com/Nextchain1']]},
  {t:'ONBOARD',k:'event',y:'Feb 2026',d:'A NextChain university activation at the Education Hall, DELSU Abraka, built for people who had never touched a wallet and funded through Artizen. Same rule as everything else: if a first-timer can\'t follow, I explained it wrong.',c:['150+ registered','70+ attended'],
-  x:['Education Hall, DELSU Abraka, February 2026','Funded through Artizen','150+ registrations','70+ people in the room','Most attendees were first-timers'],l:[['NextChain on X','https://x.com/Nextchain1']]},
+  x:['Education Hall, DELSU Abraka, February 2026','Funded through Artizen','150+ registrations','70+ people in the room','Most attendees were first-timers','Recap posted on NextChain\'s X, 16 Mar 2026: "The movement has started. Next stop: more campuses."'],
+  v:['https://video.twimg.com/amplify_video/2033478964228861952/vid/avc1/1280x720/7AOt27RZP0snOroj.mp4?tag=14','https://pbs.twimg.com/amplify_video_thumb/2033478964228861952/img/R87WgOHoL698GTG6.jpg'],
+  l:[['Watch on X','https://x.com/Nextchain1/status/2033479221591289938'],['NextChain on X','https://x.com/Nextchain1']]},
  {t:'Fhenix Nigeria',k:'ecosystem',y:'Mar 2025 →',d:'Co-founded Fhenix Nigeria from zero, the country\'s first community around encrypted computation (FHE), and became an ambassador for Fhenix, Zo Computer and Trust Wallet.',c:['co-founder','3 ambassador roles'],
   x:['Co-founded Fhenix Nigeria; on X since March 2025','Ran a packed Fhenix Nigeria booth at Crypto & DeFi Forum 2026 (June 2026)','Ran Encrypt*d Conversations on X Spaces','Ambassador: Fhenix','Ambassador: Zo Computer','Trust Wallet TrustSquad'],
   g:[['https://pbs.twimg.com/media/HKd3mMTWAAADrBK.jpg?name=small','https://x.com/FhenixNigeria/status/2064750940624650279'],['https://pbs.twimg.com/media/HKd3mLWXsAAzgup.jpg?name=small','https://x.com/FhenixNigeria/status/2064750940624650279'],['https://pbs.twimg.com/media/HKcM8iDWgAAsNWm.jpg?name=small','https://x.com/FhenixNigeria/status/2064633298500927681'],['https://pbs.twimg.com/media/HKcM8h-W4AAOqYP.jpg?name=small','https://x.com/FhenixNigeria/status/2064633298500927681']],
@@ -503,7 +506,7 @@ async function buildChain(){let prev='0'.repeat(64);
   <div class="bh"><span class="n">#${String(i).padStart(3,'0')}</span><span class="st" id="st${i}">pending</span></div>
   <div class="hash notranslate" translate="no">hash <span>${b.hash.slice(0,20)}…</span><br>prev ${b.prev.slice(0,20)}…</div>
   <span class="wm" aria-hidden="true">${String(i).padStart(2,"0")}</span><div class="kind">${esc(b.k)}</div><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p>
-  <div class="chips">${b.c.map(c=>`<span>${esc(c)}</span>`).join('')}${b.g?`<span>📸 ${b.g.length} photos</span>`:''}</div>${b.y?`<span class="yr">${esc(b.y)}</span>`:''}</article>`).join('');
+  <div class="chips">${b.c.map(c=>`<span>${esc(c)}</span>`).join('')}${b.g?`<span>📸 ${b.g.length} photos</span>`:''}${b.v?`<span>🎬 recap video</span>`:''}</div>${b.y?`<span class="yr">${esc(b.y)}</span>`:''}</article>`).join('');
  $('#pt').textContent=B.length-1;$('#fh').textContent='genesis '+B[0].hash.slice(0,12)+'…';$('#hb').textContent='#'+(B.length-1);
  $$('.blk').forEach(e=>{e.onclick=()=>inspect(+e.dataset.i);e.onkeydown=k=>{if(k.key==='Enter')inspect(+e.dataset.i)}});
  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){mine(+en.target.dataset.i);io.unobserve(en.target)}}),{threshold:.5});$$('.blk').forEach(e=>io.observe(e));
@@ -512,9 +515,9 @@ function mine(i){const s=$('#st'+i);if(!s||s.dataset.done)return;s.dataset.done=
  let n=0;const iv=setInterval(()=>{n+=Math.random()*9973|0;s.textContent='nonce '+n;},50);setTimeout(()=>{clearInterval(iv);s.textContent='confirmed ✓';s.classList.add('ok')},700+Math.random()*700)}
 function inspect(i){const b=B[i];$('#ib').innerHTML=`<div class="bn">BLOCK #${String(i).padStart(3,'0')} · ${esc(b.k)}</div><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p>
  <dl class="notranslate" translate="no"><dt>status</dt><dd>confirmed ✓</dd><dt>hash</dt><dd>${b.hash}</dd><dt>prev hash</dt><dd>${b.prev}</dd>${b.y?`<dt>time</dt><dd>${esc(b.y)}</dd>`:''}<dt>txs</dt><dd>${b.x.length}</dd></dl>
- <ul class="txs">${b.x.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>${b.g?`<div class="gal">${b.g.map(g=>`<a href="${esc(g[1])}" target="_blank" rel="noopener"><img src="${esc(g[0])}" alt="Fhenix Nigeria booth photo" loading="lazy" referrerpolicy="no-referrer"></a>`).join('')}</div>`:''}${b.l?`<div class="lk">${b.l.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('')}</div>`:''}`;
+ ${b.v?`<video class="vid" controls playsinline preload="none" poster="${esc(b.v[1])}" referrerpolicy="no-referrer"><source src="${esc(b.v[0])}" type="video/mp4"></video>`:''}<ul class="txs">${b.x.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>${b.g?`<div class="gal">${b.g.map(g=>`<a href="${esc(g[1])}" target="_blank" rel="noopener"><img src="${esc(g[0])}" alt="Fhenix Nigeria booth photo" loading="lazy" referrerpolicy="no-referrer"></a>`).join('')}</div>`:''}${b.l?`<div class="lk">${b.l.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('')}</div>`:''}`;
  $('#insp').classList.add('on');$('#insp').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>$('#ix').focus(),300)}
-function closeInsp(){$('#insp').classList.remove('on');$('#insp').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on')}
+function closeInsp(){const v=$('#insp video');if(v)v.pause();$('#insp').classList.remove('on');$('#insp').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on')}
 $('#ix').onclick=closeInsp;$('#scrim').onclick=closeInsp;
 /* pinned horizontal scroll */
 let chainH=0;function sizeChain(){const sec=$('#chain'),tr=$('#track');if(innerWidth<=760){sec.style.height='auto';tr.style.transform='none';return}
