@@ -697,7 +697,7 @@ function showStep(){const S=steps(),st=S[ti],L=S.length;document.addEventListene
  if(!st.sel){spot.classList.remove('on');place(null);return}
  if(st.go)go(st.go);else if(st.sel!=='#modes'&&st.sel!=='#lm'&&st.sel!=='#rail'&&st.sel!=='#opent')go(st.sel);
  setTimeout(()=>{const el=$(st.sel);if(!vis(el)){spot.classList.remove('on');place(null);return}let r=el.getBoundingClientRect();
-  if(r.bottom>innerHeight-20||r.top<60){const ch=Math.min(r.height,innerHeight*.55);r={left:r.left,top:Math.max(70,r.top),width:r.width,height:Math.min(ch,innerHeight-Math.max(70,r.top)-12)}}
+  if(r.bottom>innerHeight-12||(r.top<0)){const t=Math.max(74,r.top);r={left:r.left,top:t,width:r.width,height:Math.max(80,Math.min(r.bottom,innerHeight-12)-t)}}
   const pad=8;Object.assign(spot.style,{left:(r.left-pad)+'px',top:(r.top-pad)+'px',width:(r.width+pad*2)+'px',height:(r.height+pad*2)+'px'});spot.classList.add('on');place(r)},st.go?(RM?60:750):(RM?30:350))}
 function place(r){const w=tc.offsetWidth||340,h=tc.offsetHeight||220,m=12;let x,y;
  if(!r||innerWidth<700){x=(innerWidth-w)/2;y=r&&r.top+r.height/2<innerHeight/2?innerHeight-h-m-60:(r?m+64:(innerHeight-h)/2);if(!r)y=(innerHeight-h)/2}
