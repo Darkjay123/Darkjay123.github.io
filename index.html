@@ -40,6 +40,7 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .navr{display:flex;align-items:center;gap:10px}
 .kbd{font:600 11px var(--fm);color:var(--mute);border:1px solid var(--line2);border-radius:7px;padding:5px 9px;background:none;cursor:pointer}
 .kbd:hover{color:var(--acid);border-color:var(--acid)}
+@media(max-width:900px){footer{padding-bottom:64px}}
 @media(max-width:620px){.kbd{display:none}.logo span{display:none}}
 /* hero */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:110px clamp(18px,6vw,80px) 60px;max-width:1280px;margin:0 auto}
@@ -100,7 +101,7 @@ h2 em{color:var(--acid)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .chips span{font:600 11.5px var(--fm);padding:5px 9px;border-radius:8px;background:rgba(200,255,62,.08);color:var(--acid);border:1px solid rgba(200,255,62,.2)}
 .blk .yr{position:absolute;right:20px;bottom:18px;font:600 11px var(--fm);color:var(--dim)}
-@media(max-width:760px){#chain .stick{position:static;height:auto;padding:100px 0 40px}.track{flex-direction:column;transform:none!important}.blk{flex:none;height:auto;min-height:300px}.blk:after{top:auto;bottom:-23px;right:auto;left:40px;width:2px;height:23px;background:repeating-linear-gradient(180deg,var(--dim) 0 4px,transparent 4px 8px)}#chain .head{flex-direction:column;align-items:flex-start}}
+@media(max-width:760px){#chain .stick{position:static;height:auto;padding:100px 0 40px}.track{flex-direction:column;transform:none!important}.blk{flex:none;height:auto;min-height:300px}.blk .yr{position:static;align-self:flex-end;margin-top:10px}.chips{padding-bottom:0}.blk:after{top:auto;bottom:-23px;right:auto;left:40px;width:2px;height:23px;background:repeating-linear-gradient(180deg,var(--dim) 0 4px,transparent 4px 8px)}#chain .head{flex-direction:column;align-items:flex-start}}
 /* inspector */
 .insp{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--bone);color:var(--ink);z-index:70;transform:translateX(105%);transition:transform .5s cubic-bezier(.7,0,.2,1);overflow:auto;padding:28px 28px 40px}
 .insp.on{transform:none}
