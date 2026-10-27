@@ -551,7 +551,7 @@ async function buildChain(){let prev='0'.repeat(64);
   <span class="wm" aria-hidden="true">${String(i).padStart(2,"0")}</span><div class="kind">${esc(b.k)}</div><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p>
   <div class="chips">${b.c.map(c=>`<span>${esc(c)}</span>`).join('')}${b.g?`<span>📸 ${b.g.length} photos</span>`:''}${b.v?`<span>🎬 recap video</span>`:''}</div>${b.y?`<span class="yr">${esc(b.y)}</span>`:''}</article>`).join('');
  $('#pt').textContent=B.length-1;$('#fh').textContent='genesis '+B[0].hash.slice(0,12)+'…';$('#hb').textContent='#'+(B.length-1);
- $$('.blk').forEach(e=>{e.onclick=()=>inspect(+e.dataset.i);e.onkeydown=k=>{if(k.key==='Enter')inspect(+e.dataset.i)}});
+ $$('.blk').forEach(e=>{e.onclick=()=>inspect(+e.dataset.i);e.onkeydown=k=>{if(k.key==='Enter'||k.key===' '){k.preventDefault();inspect(+e.dataset.i)}}});
  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){mine(+en.target.dataset.i);io.unobserve(en.target)}}),{threshold:.5});$$('.blk').forEach(e=>io.observe(e));
  hover();sizeChain();renderTick()}
 function mine(i){const s=$('#st'+i);if(!s||s.dataset.done)return;s.dataset.done=1;if(RM){s.textContent='confirmed ✓';s.classList.add('ok');return}
@@ -559,15 +559,23 @@ function mine(i){const s=$('#st'+i);if(!s||s.dataset.done)return;s.dataset.done=
 function inspect(i){const b=B[i];$('#ib').innerHTML=`<div class="bn">BLOCK #${String(i).padStart(3,'0')} · ${esc(b.k)}</div><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p>
  <dl class="notranslate" translate="no"><dt>status</dt><dd>confirmed ✓</dd><dt>hash</dt><dd>${b.hash}</dd><dt>prev hash</dt><dd>${b.prev}</dd>${b.y?`<dt>time</dt><dd>${esc(b.y)}</dd>`:''}<dt>txs</dt><dd>${b.x.length}</dd></dl>
  ${b.v?`<video class="vid" controls playsinline preload="none" poster="${esc(b.v[1])}" referrerpolicy="no-referrer"><source src="${esc(b.v[0])}" type="video/mp4"></video>`:''}<ul class="txs">${b.x.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>${b.g?`<div class="gal">${b.g.map(g=>`<a href="${esc(g[1])}" target="_blank" rel="noopener"><img src="${esc(g[0])}" alt="Fhenix Nigeria booth photo" loading="lazy" referrerpolicy="no-referrer"></a>`).join('')}</div>`:''}${b.l?`<div class="lk">${b.l.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('')}</div>`:''}`;
- $('#insp').classList.add('on');$('#insp').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>$('#ix').focus(),300)}
+ hover();$('#insp').classList.add('on');$('#insp').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>$('#ix').focus(),300)}
 function closeInsp(){const v=$('#insp video');if(v)v.pause();$('#insp').classList.remove('on');$('#insp').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on')}
 $('#ix').onclick=closeInsp;$('#scrim').onclick=closeInsp;
 /* pinned horizontal scroll */
-let chainH=0;function sizeChain(){const sec=$('#chain'),tr=$('#track');if(innerWidth<=760){sec.style.height='auto';tr.style.transform='none';return}
- const extra=Math.max(0,tr.scrollWidth-innerWidth);chainH=extra;sec.style.height=(innerHeight+extra)+'px';onScroll()}
-function onScroll(){if(innerWidth<=760)return;const sec=$('#chain'),r=sec.getBoundingClientRect();const p=Math.min(1,Math.max(0,-r.top/Math.max(1,chainH)));
- $('#track').style.transform=`translateX(${-p*chainH}px)`;$('#pb').textContent=Math.round(p*(B.length-1))}
-addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',sizeChain);
+let chainH=0,tx=0,txT=0,chainRaf=null;
+function sizeChain(){const sec=$('#chain'),tr=$('#track');if(innerWidth<=760){sec.style.height='auto';tr.style.transform='none';chainH=tx=txT=0;return}
+ const extra=Math.max(0,tr.scrollWidth-innerWidth);chainH=extra;sec.style.height=(innerHeight+extra)+'px';onScroll(true)}
+function onScroll(){if(innerWidth<=760)return;const r=$('#chain').getBoundingClientRect();const p=Math.min(1,Math.max(0,-r.top/Math.max(1,chainH)));txT=-p*chainH;
+ $('#pb').textContent=Math.round(p*(B.length-1));
+ if(chainRaf==null)chainRaf=requestAnimationFrame(chainFrame)}
+function chainFrame(){chainRaf=null;const d=txT-tx;
+ if(d&&Math.abs(d)>=0.5&&!RM){tx+=d*(Math.abs(d)>90?0.28:0.14);$('#track').style.transform=`translate3d(${tx.toFixed(1)}px,0,0)`;chainRaf=requestAnimationFrame(chainFrame);return}
+ tx=txT;$('#track').style.transform=`translate3d(${tx}px,0,0)`}
+addEventListener('scroll',onScroll,{passive:true});
+let rsT;addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(sizeChain,100)});
+addEventListener('load',sizeChain);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{sizeChain();movePill()});
 
 /* ---------- decoder ---------- */
 const TERMS=[
